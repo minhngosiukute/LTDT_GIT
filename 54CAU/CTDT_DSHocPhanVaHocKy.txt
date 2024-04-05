@@ -1,0 +1,103 @@
+#include <stdio.h>
+#define length 100
+typedef struct {
+	int data[length];
+	int size;
+}List;
+void makenullList(List *L){
+	L->size=0;
+}
+int emptyList(List *L){
+	return L->size==0;
+}
+
+int elementAt(List *L, int i){
+	return L->data[i-1];
+}
+void pushBack(List *L, int x){
+	if (L->size+1==length) return;
+	L->data[L->size]=x;
+	L->size++;
+}
+void copyList(List *L1, List *L2){
+	makenullList(L1);
+	if (emptyList(L2)) return;
+	int i;
+	for (i=1;i<=L2->size;i++)
+		pushBack(L1,elementAt(L2,i));
+}
+
+#define MAXN 100
+typedef struct {
+	int A[MAXN][MAXN];
+	int n,m;
+}Graph;
+void initGraph (Graph *G, int n){
+	G->n=n;
+	G->m=0;
+	int u,v;
+	for (u=1;u<=n;u++)
+		for (v=1;v<=n;v++)
+			G->A[u][v]=0;
+}
+
+void addEdge(Graph *G, int u, int v){
+	G->A[u][v]=1;
+	G->m++;
+}
+
+int r[MAXN];
+void rank(Graph *G){
+	int u,v,d[MAXN];
+	for (u=1;u<=G->n;u++){
+		d[u]=0;
+		for (v=1;v<=G->n;v++)
+			if (G->A[v][u]>0) 
+				d[u]++;
+	}
+	List L1,L2;
+	makenullList(&L1);
+	for (u=1;u<=G->n;u++)
+		if (d[u]==0)
+			pushBack(&L1, u);
+	int k=0,i;
+	while (!emptyList(&L1)){
+		makenullList(&L2);
+		for (i=1;i<=L1.size;i++){
+			u=elementAt(&L1,i);
+			r[u]=k;
+			for (v=1;v<=G->n;v++)
+				if (G->A[u][v]>0){
+					d[v]--;
+					if (d[v]==0)
+						pushBack(&L2,v);
+				}
+		}
+		copyList(&L1,&L2);
+		k++;
+	}
+}
+int main(){
+	Graph G;
+	int n,e,u;
+	//freopen("test.txt", "r", stdin);
+	scanf ("%d", &n);
+	initGraph(&G,n);
+
+	for(e=1; e<=n; e++){
+		for (int i=1;i<=n;i++)	
+		{
+			scanf ("%d",&u);
+			if (u!=0){
+				addEdge(&G, u, e);
+			}
+			else break;
+		}	
+	}		
+	rank(&G);
+
+	
+	for (u=1;u<=G.n;u++)
+		printf ("HP%d: HK%d\n", u,r[u]+2);	
+	return 0;
+}

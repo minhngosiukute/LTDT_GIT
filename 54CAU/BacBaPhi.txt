@@ -1,0 +1,78 @@
+#include <stdio.h>
+#define MAXN 100
+#define NO_EDGE -1
+typedef struct {
+	int A[MAXN][MAXN];
+	int m,n;
+}Graph;
+
+void initGraph(Graph *G, int n){
+	int i,j;
+	G->n=n;
+	G->m=0;
+	for (i=1;i<=n;i++)
+		for (j=1;j<=n;j++)
+			G->A[i][j]=NO_EDGE;
+}
+
+void addEdge(Graph *G, int u, int v, int w){
+	G->A[u][v]=w;
+	G->A[v][u]=w;
+	G->m++;
+}
+
+#define oo 999999
+int pi[MAXN], p[MAXN], mark[MAXN];
+int Prim (Graph *G, Graph *T, int x){
+	int u,v,i;
+	for (u=1;u<=G->n;u++){
+		pi[u]=oo;
+		mark[u]=0;
+		p[u]=-1;
+	}
+	pi[x]=0;
+	for (i=1;i<=G->n;i++){
+		int min_dist=oo;
+		for (v=1;v<=G->n;v++)
+			if (mark[v]==0 && pi[v]<min_dist){
+				min_dist=pi[v];
+				u=v;
+			}
+		mark[u]=1;
+		for (v=1;v<=G->n;v++)
+			if (G->A[u][v]!=NO_EDGE && mark[v]==0)
+				if (G->A[u][v] <pi[v]){
+					pi[v]=G->A[u][v];
+					p[v]=u;
+				}
+	}
+	initGraph(T, G->n);
+	int sum_w=0;
+	for (u=1;u<=G->n;u++)
+		if (p[u]!=-1){
+			addEdge(T, p[u], u, G->A[p[u]][u]);
+			sum_w+=G->A[p[u]][u];
+		}
+		
+	return sum_w;
+}
+int main(){
+
+	//freopen("Prim 163.txt", "r", stdin);
+	int n, m,u,v,w,e,z,x;
+	scanf("%d%d", &n, &m);
+	Graph G,T;
+	initGraph(&G, n);
+	for(e=0; e<m; e++){	
+		scanf("%d%d%d%d", &u, &v, &z,&x);
+		w=z*x;
+		addEdge(&G, u, v, w);
+	}
+	int sum=Prim(&G, &T, 1);
+	int kt=0;
+	for (int i=1;i<=G.n;i++)
+	    if (pi[i]==oo) kt=1;
+	if (kt==1) printf ("KHONG CO LOI GIAI");
+	else printf ("%d", sum);
+	return 0;
+}

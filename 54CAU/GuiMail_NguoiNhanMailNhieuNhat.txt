@@ -1,0 +1,25 @@
+#include <stdio.h>
+
+int main(){
+   
+    int dem[50];
+    int n,m;
+    int a,b;
+    scanf ("%d%d", &n,&m);
+    for (int i=1;i<=n;i++)
+        dem[i]=0;
+    for (int i=1;i<=m;i++)
+    {
+        scanf ("%d%d", &a,&b);
+        dem[b]++;
+    }
+    int max=dem[1];
+    int maxi=1;
+    for (int i=2;i<=n;i++)
+        if (dem[i]>max){
+            max=dem[i];
+            maxi=i;
+        }
+    printf ("%d has received %d email(s).", maxi,max); 
+    return 0;
+}

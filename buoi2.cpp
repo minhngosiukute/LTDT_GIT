@@ -288,7 +288,7 @@ int main(){
     }
     // Khởi tạo toàn bộ phần tử trong mảng mark bằng 0 vì chưa có đỉnh nào được duyệt
     for(int i=1;i<=n;i++) mark[i]=0;
-    
+     
     for(int i=1;i<=n;i++){
         if(mark[i]==0){ //Nếu đỉnh chưa được duyệt
             List L = DFS_Stack(&g,i); //Gọi hàm và duyệt 

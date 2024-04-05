@@ -1,0 +1,22 @@
+#include <stdio.h>
+
+typedef struct {
+	int a,b;
+}edge;
+int main(){
+    int n,m,x,y;
+    edge L[50];
+    
+    scanf ("%d%d", &n, &m);
+    for(int i=1;i<=m;i++){
+    	
+    	scanf ("%d%d", &L[i].a, &L[i].b);}
+	scanf("%d%d", &x, &y);
+	int dem=0;
+	for (int i=1;i<=m;i++){
+		if ((L[i].b==x && L[i].a==y) || (L[i].b==y && L[i].a==x)) 
+			dem+=1;}
+	if (dem==0) printf ("HAY CHAO NHAU DI");
+	else printf ("%d", dem);
+    return 0;
+}

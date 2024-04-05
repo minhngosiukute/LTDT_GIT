@@ -1,0 +1,91 @@
+#include<stdio.h>
+typedef struct{
+    int u,v;
+}edge;
+
+typedef struct{
+    int m,n;
+    edge data[20];
+}graph;
+typedef struct{
+    int data[20];
+    int size;
+}list;
+void makenull(list *L){
+    L->size=0;
+}
+void pushList(list *L, int x){
+    L->data[L->size]=x;
+    L->size++;
+}
+void init_graph(graph *G, int n){
+    G->n=n;
+    G->m=0;
+}
+void add_edge(graph *G, int u, int v){
+    int i;
+    for (i=0;i<G->m;i++){
+        if ((G->data[i].u==u && G->data[i].v==v) || (G->data[i].u==v && G->data[i].v==u))
+            return;
+    }
+    G->data[G->m].u=u;
+    G->data[G->m].v=v;
+    G->m++;
+}
+int elementAt(list *L, int x){
+    return L->data[x];
+}
+int adjacent(graph *G, int u, int v){
+    int i;
+    for (i=0;i<=G->m;i++){
+        if ((G->data[i].u==u && G->data[i].v==v) )
+            return 1;
+    }
+    return 0;
+}
+list neighbors(graph *G, int x){
+    list listV;
+    makenull(&listV);
+    int i;
+    for (i=1;i<=G->n;i++){
+        if (adjacent(G,x,i)==1)
+            pushList(&listV,i);
+    }
+    return listV;
+}
+int color[50];
+int is_circle=0;
+void DFS(graph *G, int u, int p){
+    color[u]=0;
+    list L=neighbors(G, u);
+    for (int i=0;i<L.size;i++)
+    {
+        int v=elementAt(&L, i);
+        if (v==p) continue;
+        else if (color[v]==-1)
+                DFS(G, v, u);
+                else if (color[v]==0)
+                    is_circle=1;
+    }
+    color[u]=1;
+}
+int main(){
+	//freopen("test.txt", "r", stdin); 
+    graph G;
+	int n, m, u, v, e;
+	scanf("%d%d", &n, &m);
+	init_graph(&G, n);
+	
+	for (e = 0; e < m; e++) {
+		scanf("%d%d", &u, &v);
+		add_edge(&G, u, v);
+	}
+	for (int i=1;i<=G.n;i++)
+	    color[i]=-1;
+ 	for (int i=1;i<=G.n;i++)
+ 	    if (color[i]==-1) 
+	        DFS(&G, 1, 0);
+	if (is_circle==1) printf ("KHONG");
+	    else printf ("HOP LE");
+	
+}

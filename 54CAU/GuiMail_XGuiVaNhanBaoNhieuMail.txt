@@ -1,0 +1,23 @@
+#include <stdio.h>
+typedef struct {
+    int a,b;
+}edge;
+int main(){
+    edge L[50];
+    int gui=0,nhan=0;
+    int n,m;
+    int x;
+    scanf ("%d%d", &n,&m);
+    for (int i=1;i<=m;i++)
+    {
+        scanf ("%d%d", &L[i].a, &L[i].b);
+    }
+    scanf ("%d",&x);
+    for (int i=1;i<=m;i++)
+    {
+        if (L[i].a==x) gui++;
+        if (L[i].b==x) nhan++;
+    }
+    printf ("%d %d", gui,nhan);
+    return 0;
+}
